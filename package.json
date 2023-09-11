@@ -1,0 +1,61 @@
+{
+    "name": "earning-lambda",
+    "version": "1.0",
+    "description": "REST API for LSEG task",
+    "main": "index.js",
+    "scripts": {
+        "build": "tsc",
+        "prepare-zip": "npm run build && mkdir -p tmp && cp -R node_modules tmp/ && cp index.js tmp/",
+        "create-zip": "npm run prepare-zip && zip -r package.zip tmp",
+        "package": "npm run create-zip",
+        "test": "npx mocha --require ts-node/register src/services/earning.test.ts",
+        "lint:fix": "eslint --fix ./src"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "**/*.{js,ts}": [
+            "bash -c 'npm run build:check'",
+            "prettier --write",
+            "eslint"
+        ]
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@types/aws-lambda": "^8.10.119",
+        "@types/papaparse": "^5.3.8",
+        "aws-lambda": "^1.0.7",
+        "aws-sdk": "^2.1443.0",
+        "axios": "^0.21.4",
+        "axios-mock-adapter": "^1.21.5",
+        "chai-as-promised": "^7.1.1",
+        "csv-parse": "^5.5.0",
+        "http-status-codes": "^2.2.0",
+        "log4js": "^6.3.0"
+    },
+    "devDependencies": {
+        "@types/aws-sdk": "^2.7.0",
+        "@types/axios": "^0.14.0",
+        "@types/chai": "^4.3.5",
+        "@types/chai-as-promised": "^7.1.6",
+        "@types/mocha": "^10.0.1",
+        "@types/node": "^14.14.28",
+        "@typescript-eslint/eslint-plugin": "^4.15.0",
+        "@typescript-eslint/parser": "^4.15.0",
+        "aws-sdk-mock": "^5.8.0",
+        "chai": "^4.3.7",
+        "dotenv": "^8.2.0",
+        "eslint": "^7.20.0",
+        "husky": "^4.3.8",
+        "lint-staged": "^10.5.4",
+        "mocha": "^10.2.0",
+        "nodemon": "^2.0.4",
+        "prettier": "^2.2.1",
+        "ts-node": "^10.9.1",
+        "typescript": "^5.1.6"
+    }
+}
