@@ -2,18 +2,19 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { getData } from './services/earning';
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const { cur, targetCur } = event.queryStringParameters || {};
+  const { cur, targetCur } = event.multiValueQueryStringParameters || {};
+  const targetCurrency = targetCur?.length ? targetCur[0] : undefined;
 
   try {
-    if (!cur || !Array.isArray(cur) || !cur.length) {
+    if (!cur || !cur.length) {
       throw Error('cur parameter must be an array');
     }
 
-    if (!targetCur || !targetCur.length) {
+    if (!targetCurrency || !targetCurrency.length) {
       throw Error('targetCur parameter must be a string');
     }
 
-    const data = await getData(Array.isArray(cur) ? cur : [], targetCur);
+    const data = await getData(cur, targetCurrency);
 
     return {
       statusCode: 200,
